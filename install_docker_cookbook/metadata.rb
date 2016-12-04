@@ -1,0 +1,7 @@
+name 'install_docker_cookbook'
+maintainer 'Tony Yang'
+maintainer_email 'tianyuyang658@yahoo.com'
+license 'all_rights'
+description 'Installs/Configures install_docker_cookbook'
+long_description 'Installs/Configures install_docker_cookbook'
+version '0.1.0'
