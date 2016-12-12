@@ -7,4 +7,11 @@ It is assumed that the following tools are available when the OS was installed:
 - Git
 
 Run `./init-chef` to install ChefDK
+Then go into the cookbook directory, and run `chef-client --local-mode --override-runlist install_docker_cookbook`
 
+## Dev Guide
+For the cookbook development, run `rake`
+The following will be tested by default
+- `rubocop` to test the Ruby style checker
+- `foodcritic` to test the Chef style checker
+- `chef exec rspec spec` to run the unit test
