@@ -3,19 +3,50 @@
 echo "Starting to initialize a new dev box ...";
 
 CHEF_DOWNLOAD="chef_download";
+BASH_PROFILE=".bash_profile";
+CHEFDK_VERSION="1.1.16-1";
+INSTALLED_CHEF_VERSION=$(dpkg -l | grep chefdk | awk '{print $3}');
 
-cd ~;
-if [ -a $CHEF_DOWNLOAD ]
+if [ "$INSTALLED_CHEF_VERSION" != "$CHEFDK_VERSION" ]
+then
+
+cd /tmp;
+if [ -a "$CHEF_DOWNLOAD" ]
 then
     rm -rf $CHEF_DOWNLOAD;
 fi
+
 mkdir $CHEF_DOWNLOAD;
 cd $CHEF_DOWNLOAD;
 echo "######## Downloading ChefDK";
-wget https://packages.chef.io/stable/ubuntu/12.04/chefdk_1.0.3-1_amd64.deb
+wget https://packages.chef.io/files/stable/chefdk/1.1.16/ubuntu/16.04/chefdk_${CHEFDK_VERSION}_amd64.deb
 echo "######## Installing ChefDK";
-sudo dpkg -i chefdk_1.0.3-1_amd64.deb
+sudo dpkg -i chefdk_${CHEFDK_VERSION}_amd64.deb
 echo "######## Cleanup";
-cd ~;
+cd /tmp;
 rm -rf $CHEF_DOWNLOAD;
+
+echo "######## Set System Ruby to Chef embedded Ruby";
+cd ~;
+if [ -a "$BASH_PROFILE" ]
+then
+    grep -irn "chef shell-init bash" $BASH_PROFILE
+    if [ "$?" != "0" ]
+    then
+        echo "######## System Ruby not embedded Ruby, updating $BASH_PROFILE"
+        echo 'eval "$(chef shell-init bash)"' >> $BASH_PROFILE
+        source $BASH_PROFILE
+    else
+        echo "######## Embedded Ruby is already the System Ruby"
+    fi
+else
+    echo "######## Creating and updating $BASH_PROFILE to use embedded Ruby"
+    touch $BASH_PROFILE
+    echo 'eval "$(chef shell-init bash)"' >> $BASH_PROFILE
+    source $BASH_PROFILE
+fi
 echo "######## Setup completed";
+
+else
+    echo "######## The latest ChefDK is already installed"
+fi
