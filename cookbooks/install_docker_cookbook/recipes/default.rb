@@ -27,9 +27,8 @@ apt_update 'update_docker_package' do
   action :update
 end
 
-execute 'install_linux_image' do
-  command 'apt-get install linux-image-extra-$(uname -r) \
-               linux-image-extra-virtual'
+apt_package 'install_linux_image' do
+  package_name ['linux-image-extra-4.4.0-36-generic', 'linux-image-extra-virtual']
 end
 
 apt_package 'docker-engine'

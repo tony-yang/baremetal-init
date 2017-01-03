@@ -44,9 +44,8 @@ describe 'install_docker_cookbook::default' do
     end
 
     it 'installs linux image' do
-      expect(chef_run).to run_execute('install_linux_image')
-        .with(command: 'apt-get install linux-image-extra-$(uname -r) \
-               linux-image-extra-virtual')
+      expect(chef_run).to install_apt_package('install_linux_image')
+        .with(package_name: ['linux-image-extra-4.4.0-36-generic', 'linux-image-extra-virtual'])
     end
 
     it 'installs the docker engine' do
