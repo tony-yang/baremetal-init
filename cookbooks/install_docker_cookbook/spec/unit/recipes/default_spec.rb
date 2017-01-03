@@ -55,5 +55,10 @@ describe 'install_docker_cookbook::default' do
     it 'starts the docker service' do
       expect(chef_run).to start_service('docker')
     end
+
+    it 'installs the docker compose' do
+      expect(chef_run).to create_remote_file('/usr/local/bin/docker-compose')
+        .with(mode: '0755')
+    end
   end
 end
