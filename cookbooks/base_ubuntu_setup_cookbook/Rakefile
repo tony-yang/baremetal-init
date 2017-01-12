@@ -32,7 +32,7 @@ task style: ['style:ruby', 'style:chef']
 begin
   require 'rspec/core/rake_task'
 
-  desc 'Run ChefSpec'
+  desc 'Run Chef Spec'
   RSpec::Core::RakeTask.new(:spec)
 rescue LoadError => e
   puts ">>> Gem load error: #{e}, omitting spec" unless ENV['CI']
