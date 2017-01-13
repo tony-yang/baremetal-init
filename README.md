@@ -9,10 +9,21 @@ It is assumed that the following tools are available when the OS was installed:
 Run `./init-chef` to install ChefDK and update the System Ruby to the Chef embedded Ruby
 Then go into the cookbooks directory, and run `chef-client --local-mode --override-runlist [select cookbook to run]` to install the Docker engine and compose
 
+Example:
 ```
 ./init-chef
 cd cookbooks
-chef-client --local-mode --override-runlist install_docker_cookbook
+sudo chef-client --local-mode --override-runlist base_ubuntu_setup_cookbook
+sudo chef-client --local-mode --override-runlist install_docker_cookbook
+```
+
+After the initial setup, there are essential Dockerfiles to kick start development
+
+Example:
+```
+cd Dockerfiles/ubuntu-dev
+sudo docker build -t ubuntu-dev .
+sudo docker run -it ubuntu-dev
 ```
 
 ## Dev Guide
