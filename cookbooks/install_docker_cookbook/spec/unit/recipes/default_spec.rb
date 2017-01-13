@@ -22,7 +22,7 @@ describe 'install_docker_cookbook::default' do
     end
 
     it 'installs certificates package' do
-      expect(chef_run).to install_apt_package('ca_certificates')
+      expect(chef_run).to upgrade_apt_package('ca_certificates')
         .with(package_name: ['apt-transport-https', 'ca-certificates'])
     end
 
@@ -49,7 +49,7 @@ describe 'install_docker_cookbook::default' do
     end
 
     it 'installs the docker engine' do
-      expect(chef_run).to install_apt_package('docker-engine')
+      expect(chef_run).to upgrade_apt_package('docker-engine')
     end
 
     it 'starts the docker service' do

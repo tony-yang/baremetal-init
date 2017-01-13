@@ -10,6 +10,7 @@ end
 
 apt_package 'ca_certificates' do
   package_name ['apt-transport-https', 'ca-certificates']
+  action :upgrade
 end
 
 execute 'add_gpg' do
@@ -31,7 +32,9 @@ apt_package 'install_linux_image' do
   package_name ['linux-image-extra-4.4.0-36-generic', 'linux-image-extra-virtual']
 end
 
-apt_package 'docker-engine'
+apt_package 'docker-engine' do
+  action :upgrade
+end
 
 service 'docker' do
   action :start

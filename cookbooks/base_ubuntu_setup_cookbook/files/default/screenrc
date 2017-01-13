@@ -1,0 +1,8 @@
+startup_message off 
+defscrollback 10000
+autodetach on
+defshell /bin/bash
+nonblock on
+vbell off 
+
+# hardstatus alwayslastline '%{WB}%-w%{bW}%n %t%f%{-}%+w %-12=%c %D %d'
