@@ -20,3 +20,7 @@ user node['gituser'] do
   shell '/bin/bash'
   password node['gitpassword']
 end
+
+link node['gitrepo'] do
+  to node['nfsrepo']
+end

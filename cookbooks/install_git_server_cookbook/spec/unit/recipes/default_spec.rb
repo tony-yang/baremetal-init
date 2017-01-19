@@ -16,6 +16,7 @@ describe 'install_git_server_cookbook::default' do
         node.override['gituser'] = 'testuser'
         node.override['gitgroup'] = 'testgroup'
         node.override['gitpassword'] = 'password'
+        node.override['nfsrepo'] = 'actual'
       end
       runner.converge(described_recipe)
     end
@@ -43,6 +44,12 @@ describe 'install_git_server_cookbook::default' do
         manage_home: TRUE,
         shell: '/bin/bash',
         password: 'password'
+      )
+    end
+
+    it 'creates a symlink to the NFS' do
+      expect(chef_run).to create_link('/home/testuser/repo').with(
+        to: 'actual'
       )
     end
   end
