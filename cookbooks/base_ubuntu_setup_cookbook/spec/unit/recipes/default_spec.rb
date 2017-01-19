@@ -7,7 +7,7 @@
 require 'spec_helper'
 
 describe 'base_ubuntu_setup_cookbook::default' do
-  context 'When all attributes are default, on an unspecified platform' do
+  context 'On ubuntu with override owner, group, and nfs' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new(
         platform: 'ubuntu',
@@ -15,6 +15,7 @@ describe 'base_ubuntu_setup_cookbook::default' do
       ) do |node|
         node.override['owner'] = 'testuser'
         node.override['group'] = 'testgroup'
+        node.override['nfs'] = '123.456.7.8'
       end
       runner.converge(described_recipe)
     end
@@ -50,6 +51,45 @@ describe 'base_ubuntu_setup_cookbook::default' do
         owner: 'testuser',
         group: 'testgroup',
         mode: '0664'
+      )
+    end
+
+    it 'mounts the NFS cloud drive' do
+      expect(chef_run).to mount_mount('/mnt/scm').with(
+        device: '123.456.7.8:/scm',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+      expect(chef_run).to enable_mount('/mnt/scm').with(
+        device: '123.456.7.8:/scm',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+    end
+  end
+
+  context 'On ubuntu with no nfs mount' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(
+        platform: 'ubuntu',
+        version: '16.04'
+      ) do |node|
+        node.override['owner'] = 'testuser'
+        node.override['group'] = 'testgroup'
+      end
+      runner.converge(described_recipe)
+    end
+
+    it 'does not mount the NFS cloud drive' do
+      expect(chef_run).to_not mount_mount('/mnt/scm').with(
+        device: '123.456.7.8:/scm',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+      expect(chef_run).to_not enable_mount('/mnt/scm').with(
+        device: '123.456.7.8:/scm',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
       )
     end
   end
