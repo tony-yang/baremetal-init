@@ -27,7 +27,7 @@ sudo docker run -it ubuntu-dev
 ```
 
 ## Dev Guide
-For the cookbook development, run `rake`
+For the cookbook development, run `bundle install` to install the essential RubyGems library. Then run `rake`
 The following will be tested by default
 - `rubocop` to run the Ruby style checker
 - `foodcritic` to run the Chef style checker
