@@ -37,3 +37,7 @@ mount node['nfsmount'] do
   action [:mount, :enable]
   only_if { node['nfs'].casecmp('none') != 0 }
 end
+
+service 'cron' do
+  action :start
+end

@@ -66,6 +66,10 @@ describe 'base_ubuntu_setup_cookbook::default' do
         options: %w(rw auto nofail noatime nolock tcp)
       )
     end
+
+    it 'starts the cron service' do
+      expect(chef_run).to start_service('cron')
+    end
   end
 
   context 'On ubuntu with no nfs mount' do
