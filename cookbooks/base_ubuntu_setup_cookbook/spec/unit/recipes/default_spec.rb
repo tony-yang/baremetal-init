@@ -73,7 +73,7 @@ describe 'base_ubuntu_setup_cookbook::default' do
 
     it 'resets the ufw firewall and rules' do
       expect(chef_run).to run_execute('ufw_reset')
-        .with(command: 'ufw reset')
+        .with(command: 'ufw --force reset')
     end
 
     it 'enables the firewall' do

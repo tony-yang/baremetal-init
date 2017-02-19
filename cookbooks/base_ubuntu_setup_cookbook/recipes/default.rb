@@ -43,7 +43,7 @@ service 'cron' do
 end
 
 execute 'ufw_reset' do
-  command 'ufw reset'
+  command 'ufw --force reset'
 end
 
 execute 'enable_ufw' do
