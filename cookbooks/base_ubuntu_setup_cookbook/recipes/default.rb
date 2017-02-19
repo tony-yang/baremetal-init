@@ -42,12 +42,30 @@ service 'cron' do
   action :start
 end
 
-firewall 'default' do
-  action :install
+execute 'ufw_reset' do
+  command 'ufw reset'
 end
 
-firewall_rule 'ssh' do
-  port 22
-  command :allow
-  only_if { node['firewall']['allow_ssh'] }
+execute 'enable_ufw' do
+  command 'ufw enable'
+end
+
+execute 'deny_all_incoming' do
+  command 'ufw default deny incoming'
+end
+
+execute 'allow_ssh' do
+  command 'ufw allow ssh'
+end
+
+execute 'allow_mysql' do
+  command 'ufw allow 3306/tcp'
+end
+
+execute 'allow_redis' do
+  command 'ufw allow 6379/tcp'
+end
+
+execute 'allow_datacollector' do
+  command 'ufw allow 8000/tcp'
 end

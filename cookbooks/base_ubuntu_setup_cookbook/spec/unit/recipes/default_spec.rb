@@ -71,12 +71,39 @@ describe 'base_ubuntu_setup_cookbook::default' do
       expect(chef_run).to start_service('cron')
     end
 
+    it 'resets the ufw firewall and rules' do
+      expect(chef_run).to run_execute('ufw_reset')
+        .with(command: 'ufw reset')
+    end
+
     it 'enables the firewall' do
-      expect(chef_run).to restart_firewall('default')
+      expect(chef_run).to run_execute('enable_ufw')
+        .with(command: 'ufw enable')
+    end
+
+    it 'deny all incoming connection' do
+      expect(chef_run).to run_execute('deny_all_incoming')
+        .with(command: 'ufw default deny incoming')
     end
 
     it 'enables SSH ports' do
-      expect(chef_run).to create_firewall_rule('ssh')
+      expect(chef_run).to run_execute('allow_ssh')
+        .with(command: 'ufw allow ssh')
+    end
+
+    it 'enables mysql ports' do
+      expect(chef_run).to run_execute('allow_mysql')
+        .with(command: 'ufw allow 3306/tcp')
+    end
+
+    it 'enables redis ports' do
+      expect(chef_run).to run_execute('allow_redis')
+        .with(command: 'ufw allow 6379/tcp')
+    end
+
+    it 'enables datacollector ports' do
+      expect(chef_run).to run_execute('allow_datacollector')
+        .with(command: 'ufw allow 8000/tcp')
     end
   end
 
