@@ -76,11 +76,6 @@ describe 'base_ubuntu_setup_cookbook::default' do
         .with(command: 'ufw --force reset')
     end
 
-    it 'enables the firewall' do
-      expect(chef_run).to run_execute('enable_ufw')
-        .with(command: 'ufw enable')
-    end
-
     it 'deny all incoming connection' do
       expect(chef_run).to run_execute('deny_all_incoming')
         .with(command: 'ufw default deny incoming')
@@ -104,6 +99,11 @@ describe 'base_ubuntu_setup_cookbook::default' do
     it 'enables datacollector ports' do
       expect(chef_run).to run_execute('allow_datacollector')
         .with(command: 'ufw allow 8000/tcp')
+    end
+
+    it 'enables the firewall' do
+      expect(chef_run).to run_execute('enable_ufw')
+        .with(command: 'ufw --force enable')
     end
   end
 

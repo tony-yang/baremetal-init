@@ -46,10 +46,6 @@ execute 'ufw_reset' do
   command 'ufw --force reset'
 end
 
-execute 'enable_ufw' do
-  command 'ufw enable'
-end
-
 execute 'deny_all_incoming' do
   command 'ufw default deny incoming'
 end
@@ -68,4 +64,8 @@ end
 
 execute 'allow_datacollector' do
   command 'ufw allow 8000/tcp'
+end
+
+execute 'enable_ufw' do
+  command 'ufw --force enable'
 end
