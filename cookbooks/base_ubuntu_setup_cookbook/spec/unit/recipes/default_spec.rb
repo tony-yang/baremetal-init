@@ -70,6 +70,14 @@ describe 'base_ubuntu_setup_cookbook::default' do
     it 'starts the cron service' do
       expect(chef_run).to start_service('cron')
     end
+
+    it 'enables the firewall' do
+      expect(chef_run).to restart_firewall('default')
+    end
+
+    it 'enables SSH ports' do
+      expect(chef_run).to create_firewall_rule('ssh')
+    end
   end
 
   context 'On ubuntu with no nfs mount' do

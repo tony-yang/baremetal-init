@@ -41,3 +41,13 @@ end
 service 'cron' do
   action :start
 end
+
+firewall 'default' do
+  action :install
+end
+
+firewall_rule 'ssh' do
+  port 22
+  command :allow
+  only_if { node['firewall']['allow_ssh'] }
+end
