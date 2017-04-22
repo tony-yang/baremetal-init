@@ -1,8 +1,8 @@
-# devinit
-Initialize a new dev box with essential tools to start development
+# Baremetal Init
+Initialize a new Bare metal box with essential tools to start development or production use
 
 This code is developed on Ubuntu and only tested on Ubuntu-based system
-It is assumed that the following tools are available when the OS was installed:
+It was assumed that the following tools are available when the OS was installed:
 - Bash
 - Git
 
