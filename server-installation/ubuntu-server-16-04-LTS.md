@@ -66,8 +66,59 @@ Identify the firmware that failed. If it is not critical, reboot. This happened 
 
 
 ## System Configuration
-Update the system first, and then start the Chef setup
+Update the system first
 ```
 sudo apt-get update && sudo apt-get upgrade
-
 ```
+
+Start the Chef setup. Follow the README of this repo: https://github.com/tony-yang/baremetal-init
+
+Create a RSA key-pair: `ssh-keygen`
+
+Connect to the new machine from the local box where the RSA key-pair was generated, and create an authorized_keys file
+```
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+cd .ssh
+touch authorized_keys
+chmod 600 authorized_keys
+```
+Copy the public key into the authorized_keys file. Test it to make sure SSH using the RSA key-pair works.
+
+Disable Password Authentication (Usually `PasswordAuthentication yes` is commented out)
+```
+sudo vim /etc/ssh/sshd_config
+PasswordAuthentication no
+
+# Also ensure the following
+PubkeyAuthentication yes
+ChallengeResponseAuthentication no
+```
+
+Configure a static NAT IP instead of using DHCP
+```
+sudo vim /etc/network/interfaces
+
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+#auto enp4s0
+#iface enp4s0 inet dhcp
+auto enp4s0    #### NOTE: the interface might be different, change accordingly
+iface enp4s0 inet static
+address 192.168.2.<ADDRESS>
+netmask 255.255.255.0
+network 192.168.2.0
+broadcast 192.168.2.255
+gateway 192.168.2.1
+dns-nameservers 192.168.2.1
+```
+
+Reboot `sudo reboot` && Profit!
