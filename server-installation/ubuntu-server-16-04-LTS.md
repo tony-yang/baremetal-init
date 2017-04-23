@@ -71,7 +71,7 @@ Update the system first
 sudo apt-get update && sudo apt-get upgrade
 ```
 
-Start the Chef setup. Follow the README of this repo: https://github.com/tony-yang/baremetal-init
+Start the Chef setup for the base ubuntu configuration. Follow the README of this repo: https://github.com/tony-yang/baremetal-init
 
 Create a RSA key-pair: `ssh-keygen`
 

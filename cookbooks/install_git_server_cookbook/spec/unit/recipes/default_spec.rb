@@ -18,6 +18,7 @@ describe 'install_git_server_cookbook::default' do
         node.override['gitpassword'] = 'password'
         node.override['nfsrepo'] = 'actual'
         node.override['nfs'] = '123.456.7.8'
+        node.override['nfsmount'] = '/test/mountpoint'
       end
       runner.converge(described_recipe)
     end
@@ -30,21 +31,12 @@ describe 'install_git_server_cookbook::default' do
       expect(chef_run).to update_apt_update('update_package_info')
     end
 
-    it 'mounts the NFS cloud drive' do
-      expect(chef_run).to mount_mount('/mnt/scm').with(
-        device: '123.456.7.8:/scm',
-        fstype: 'nfs',
-        options: %w(rw auto nofail noatime nolock tcp)
-      )
-      expect(chef_run).to enable_mount('/mnt/scm').with(
-        device: '123.456.7.8:/scm',
-        fstype: 'nfs',
-        options: %w(rw auto nofail noatime nolock tcp)
-      )
-    end
-
     it 'installs the git-core package' do
       expect(chef_run).to upgrade_apt_package('git-core')
+    end
+
+    it 'installs the nfs-common package' do
+      expect(chef_run).to upgrade_apt_package('nfs-common')
     end
 
     it 'creates a new git group' do
@@ -58,6 +50,27 @@ describe 'install_git_server_cookbook::default' do
         manage_home: TRUE,
         shell: '/bin/bash',
         password: 'password'
+      )
+    end
+
+    it 'creates the proper mount directory' do
+      expect(chef_run).to create_directory('/test/mountpoint').with(
+        user: 'testuser',
+        group: 'testgroup',
+        mode: '0755'
+      )
+    end
+
+    it 'mounts the NFS cloud drive' do
+      expect(chef_run).to mount_mount('/test/mountpoint').with(
+        device: '123.456.7.8:/scm',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+      expect(chef_run).to enable_mount('/test/mountpoint').with(
+        device: '123.456.7.8:/scm',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
       )
     end
 
@@ -78,17 +91,18 @@ describe 'install_git_server_cookbook::default' do
         node.override['gitgroup'] = 'testgroup'
         node.override['gitpassword'] = 'password'
         node.override['nfsrepo'] = 'actual'
+        node.override['nfsmount'] = '/test/mountpoint'
       end
       runner.converge(described_recipe)
     end
 
     it 'does not mount the NFS cloud drive' do
-      expect(chef_run).to_not mount_mount('/mnt/scm').with(
+      expect(chef_run).to_not mount_mount('/test/mountpoint').with(
         device: '123.456.7.8:/scm',
         fstype: 'nfs',
         options: %w(rw auto nofail noatime nolock tcp)
       )
-      expect(chef_run).to_not enable_mount('/mnt/scm').with(
+      expect(chef_run).to_not enable_mount('/test/mountpoint').with(
         device: '123.456.7.8:/scm',
         fstype: 'nfs',
         options: %w(rw auto nofail noatime nolock tcp)
