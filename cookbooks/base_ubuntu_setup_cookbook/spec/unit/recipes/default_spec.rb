@@ -16,6 +16,8 @@ describe 'base_ubuntu_setup_cookbook::default' do
         node.override['owner'] = 'testuser'
         node.override['group'] = 'testgroup'
         node.override['nfs'] = '123.456.7.8'
+        node.override['nfsmount']['log'] = '/test/logmount'
+        node.override['nfsmount']['db'] = '/test/dbmount'
       end
       runner.converge(described_recipe)
     end
@@ -36,6 +38,10 @@ describe 'base_ubuntu_setup_cookbook::default' do
       expect(chef_run).to upgrade_apt_package('vim')
     end
 
+    it 'installs the nfs-common package' do
+      expect(chef_run).to upgrade_apt_package('nfs-common')
+    end
+
     it 'creates the vim profile' do
       expect(chef_run).to create_cookbook_file('/home/testuser/.vimrc').with(
         source: 'vimrc',
@@ -51,6 +57,48 @@ describe 'base_ubuntu_setup_cookbook::default' do
         owner: 'testuser',
         group: 'testgroup',
         mode: '0664'
+      )
+    end
+
+    it 'creates log mount directory' do
+      expect(chef_run).to create_directory('/test/logmount').with(
+        user: 'testuser',
+        group: 'testgroup',
+        mode: '0755'
+      )
+    end
+
+    it 'mounts the NFS log directory' do
+      expect(chef_run).to mount_mount('/test/logmount').with(
+        device: '123.456.7.8:/log',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+      expect(chef_run).to enable_mount('/test/logmount').with(
+        device: '123.456.7.8:/log',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+    end
+
+    it 'creates db mount directory' do
+      expect(chef_run).to create_directory('/test/dbmount').with(
+        user: 'testuser',
+        group: 'testgroup',
+        mode: '0755'
+      )
+    end
+
+    it 'mounts the NFS db directory' do
+      expect(chef_run).to mount_mount('/test/dbmount').with(
+        device: '123.456.7.8:/db',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+      expect(chef_run).to enable_mount('/test/dbmount').with(
+        device: '123.456.7.8:/db',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
       )
     end
 
@@ -91,6 +139,47 @@ describe 'base_ubuntu_setup_cookbook::default' do
     it 'enables the firewall' do
       expect(chef_run).to run_execute('enable_ufw')
         .with(command: 'ufw --force enable')
+    end
+  end
+
+  context 'On ubuntu without nfs override' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(
+        platform: 'ubuntu',
+        version: '16.04'
+      ) do |node|
+        node.override['owner'] = 'testuser'
+        node.override['group'] = 'testgroup'
+        node.override['nfsmount']['log'] = '/test/logmount'
+        node.override['nfsmount']['db'] = '/test/dbmount'
+      end
+      runner.converge(described_recipe)
+    end
+
+    it 'does not mount the NFS log directory' do
+      expect(chef_run).to_not mount_mount('/test/logmount').with(
+        device: '123.456.7.8:/log',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+      expect(chef_run).to_not enable_mount('/test/logmount').with(
+        device: '123.456.7.8:/log',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+    end
+
+    it 'does not mount the NFS db directory' do
+      expect(chef_run).to_not mount_mount('/test/dbmount').with(
+        device: '123.456.7.8:/db',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
+      expect(chef_run).to_not enable_mount('/test/dbmount').with(
+        device: '123.456.7.8:/db',
+        fstype: 'nfs',
+        options: %w(rw auto nofail noatime nolock tcp)
+      )
     end
   end
 end

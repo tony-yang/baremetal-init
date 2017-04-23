@@ -16,6 +16,10 @@ apt_package 'vim' do
   action :upgrade
 end
 
+apt_package 'nfs-common' do
+  action :upgrade
+end
+
 cookbook_file ::File.join(node['homedir'], '.vimrc') do
   source 'vimrc'
   owner node['owner']
@@ -28,6 +32,34 @@ cookbook_file ::File.join(node['homedir'], '.screenrc') do
   owner node['owner']
   group node['group']
   mode '0664'
+end
+
+directory node['nfsmount']['log'] do
+  user node['owner']
+  group node['group']
+  mode '0755'
+end
+
+mount node['nfsmount']['log'] do
+  device "#{node['nfs']}:/log"
+  fstype 'nfs'
+  options 'rw,auto,nofail,noatime,nolock,tcp'
+  action [:mount, :enable]
+  only_if { node['nfs'].casecmp('none') != 0 }
+end
+
+directory node['nfsmount']['db'] do
+  user node['owner']
+  group node['group']
+  mode '0755'
+end
+
+mount node['nfsmount']['db'] do
+  device "#{node['nfs']}:/db"
+  fstype 'nfs'
+  options 'rw,auto,nofail,noatime,nolock,tcp'
+  action [:mount, :enable]
+  only_if { node['nfs'].casecmp('none') != 0 }
 end
 
 service 'cron' do
