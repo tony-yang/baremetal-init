@@ -5,7 +5,7 @@ This is a walk-through and a standardization of the installation of the Ubuntu s
 Unfortunately, at this stage I don't have a centralized OS deployment tool, so OS is installed manually on new hardware. Configuration after OS installation is automated by Chef in the cookbooks directory. Service development and deployment should be done in Docker.
 
 
-## General Configuration
+## OS Install Configuration
 
 1. Plugin the Ubuntu bootable USB, enter the BIOS/UEFI, and change the USB boot priority to number 1
 2. In the BIOS/UEFI, disable the SecureBoot option if it is enabled.
@@ -17,10 +17,10 @@ Language: English
 Country: US
 Keyboard: US
 Hostname:
-  public-facing: ystpublic<#>
-  internal: ystinternal<#>
-Real Name: yst
-Username: yst
+  public-facing: <hostname>public<#>
+  internal: <hostname>internal<#>
+Real Name: <USERNAME>
+Username: <USERNAME>
 Password: <SECRETS>
 Encrypt directory: no
 Timezone: America/Toronto
@@ -62,7 +62,7 @@ If the reboot failed with firmware error message. For example:
 ath10k_pci ... direct firmware load failed with error 2
 ```
 
-Identify the firmware that failed. If it is not critical, reboot. This happened with some newer wifi-network pci device. Otherwise, disable that pci device if this problem is intermittent.
+Identify the firmware that failed. If it is not critical, reboot. This happened with some newer wifi-network pci devices. Otherwise, disable that pci device if this problem is intermittent.
 
 
 ## System Configuration
