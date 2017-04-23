@@ -11,6 +11,14 @@ apt_package 'git-core' do
   action :upgrade
 end
 
+mount node['nfsmount'] do
+  device "#{node['nfs']}:/scm"
+  fstype 'nfs'
+  options 'rw,auto,nofail,noatime,nolock,tcp'
+  action [:mount, :enable]
+  only_if { node['nfs'].casecmp('none') != 0 }
+end
+
 group node['gitgroup']
 
 user node['gituser'] do

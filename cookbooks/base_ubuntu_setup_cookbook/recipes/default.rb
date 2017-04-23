@@ -30,14 +30,6 @@ cookbook_file ::File.join(node['homedir'], '.screenrc') do
   mode '0664'
 end
 
-mount node['nfsmount'] do
-  device "#{node['nfs']}:/scm"
-  fstype 'nfs'
-  options 'rw,auto,nofail,noatime,nolock,tcp'
-  action [:mount, :enable]
-  only_if { node['nfs'].casecmp('none') != 0 }
-end
-
 service 'cron' do
   action :start
 end
