@@ -31,6 +31,28 @@ describe 'install_git_server_cookbook::default' do
       expect(chef_run).to update_apt_update('update_package_info')
     end
 
+    it 'installs the git-core package' do
+      expect(chef_run).to upgrade_apt_package('git-core')
+    end
+
+    it 'installs the nfs-common package' do
+      expect(chef_run).to upgrade_apt_package('nfs-common')
+    end
+
+    it 'creates a new git group' do
+      expect(chef_run).to create_group('testgroup')
+    end
+
+    it 'creates new git user' do
+      expect(chef_run).to create_user('testuser').with(
+        gid: 'testgroup',
+        home: '/home/testuser',
+        manage_home: TRUE,
+        shell: '/bin/bash',
+        password: 'password'
+      )
+    end
+
     it 'creates the proper mount directory' do
       expect(chef_run).to create_directory('/test/mountpoint').with(
         user: 'testuser',
@@ -49,24 +71,6 @@ describe 'install_git_server_cookbook::default' do
         device: '123.456.7.8:/scm',
         fstype: 'nfs',
         options: %w(rw auto nofail noatime nolock tcp)
-      )
-    end
-
-    it 'installs the git-core package' do
-      expect(chef_run).to upgrade_apt_package('git-core')
-    end
-
-    it 'creates a new git group' do
-      expect(chef_run).to create_group('testgroup')
-    end
-
-    it 'creates new git user' do
-      expect(chef_run).to create_user('testuser').with(
-        gid: 'testgroup',
-        home: '/home/testuser',
-        manage_home: TRUE,
-        shell: '/bin/bash',
-        password: 'password'
       )
     end
 

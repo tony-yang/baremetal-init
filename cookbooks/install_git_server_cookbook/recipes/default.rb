@@ -11,6 +11,10 @@ apt_package 'git-core' do
   action :upgrade
 end
 
+apt_package 'nfs-common' do
+  action :upgrade
+end
+
 group node['gitgroup']
 
 user node['gituser'] do
