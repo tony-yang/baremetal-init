@@ -8,16 +8,10 @@ apt_update 'update_ubuntu_repo' do
   action :update
 end
 
-apt_package 'openssh-server' do
-  action :upgrade
-end
-
-apt_package 'vim' do
-  action :upgrade
-end
-
-apt_package 'nfs-common' do
-  action :upgrade
+%w(openssh-server vim nfs-common).each do |pkg|
+  apt_package pkg do
+    action :upgrade
+  end
 end
 
 cookbook_file ::File.join(node['homedir'], '.vimrc') do
