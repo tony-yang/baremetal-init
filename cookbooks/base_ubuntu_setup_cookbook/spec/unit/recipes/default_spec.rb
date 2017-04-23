@@ -54,19 +54,6 @@ describe 'base_ubuntu_setup_cookbook::default' do
       )
     end
 
-    it 'mounts the NFS cloud drive' do
-      expect(chef_run).to mount_mount('/mnt/scm').with(
-        device: '123.456.7.8:/scm',
-        fstype: 'nfs',
-        options: %w(rw auto nofail noatime nolock tcp)
-      )
-      expect(chef_run).to enable_mount('/mnt/scm').with(
-        device: '123.456.7.8:/scm',
-        fstype: 'nfs',
-        options: %w(rw auto nofail noatime nolock tcp)
-      )
-    end
-
     it 'starts the cron service' do
       expect(chef_run).to start_service('cron')
     end
@@ -104,32 +91,6 @@ describe 'base_ubuntu_setup_cookbook::default' do
     it 'enables the firewall' do
       expect(chef_run).to run_execute('enable_ufw')
         .with(command: 'ufw --force enable')
-    end
-  end
-
-  context 'On ubuntu with no nfs mount' do
-    let(:chef_run) do
-      runner = ChefSpec::ServerRunner.new(
-        platform: 'ubuntu',
-        version: '16.04'
-      ) do |node|
-        node.override['owner'] = 'testuser'
-        node.override['group'] = 'testgroup'
-      end
-      runner.converge(described_recipe)
-    end
-
-    it 'does not mount the NFS cloud drive' do
-      expect(chef_run).to_not mount_mount('/mnt/scm').with(
-        device: '123.456.7.8:/scm',
-        fstype: 'nfs',
-        options: %w(rw auto nofail noatime nolock tcp)
-      )
-      expect(chef_run).to_not enable_mount('/mnt/scm').with(
-        device: '123.456.7.8:/scm',
-        fstype: 'nfs',
-        options: %w(rw auto nofail noatime nolock tcp)
-      )
     end
   end
 end

@@ -1,2 +1,12 @@
 Metrics/LineLength:
   Max: 120
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: ()
+    '%i': ()
+    '%w': ()
+
+Metrics/BlockLength:
+  Exclude:
+    - "**/*_spec.rb"
