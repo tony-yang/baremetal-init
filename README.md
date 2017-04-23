@@ -1,7 +1,7 @@
 # Baremetal Init
 Initialize a new Bare metal box with essential tools to start development or production use
 
-This code is developed on Ubuntu and only tested on Ubuntu-based system
+This code is developed for Ubuntu Server and only tested on Ubuntu-based system.
 It was assumed that the following tools are available when the OS was installed:
 - Bash
 - Git
