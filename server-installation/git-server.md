@@ -1,6 +1,6 @@
 # Git Server Installation Guide
 
-Login to the NFS server, and give permission to the new machine where the SCM repo is mounted
+Login to the NFS server, and give permission to the new machine where the SCM repo will be mounted
 
 Follow the README of this repo: https://github.com/tony-yang/baremetal-init
 
