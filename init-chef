@@ -24,6 +24,12 @@ echo "######## Downloading ChefDK";
 wget https://packages.chef.io/files/stable/chefdk/${CHEFDK_MAJOR_VERSION}/ubuntu/${UBUNTU_VERSION}/chefdk_${CHEFDK_VERSION}_amd64.deb
 echo "######## Installing ChefDK";
 sudo dpkg -i chefdk_${CHEFDK_VERSION}_amd64.deb
+if [ "$?" != "0" ]
+then
+  echo "######## ERROR: Something went wrong!";
+  exit $?;
+fi
+
 echo "######## Cleanup";
 cd /tmp;
 rm -rf $CHEF_DOWNLOAD;
