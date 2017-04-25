@@ -1,16 +1,29 @@
 FROM ubuntu
-RUN \
-  apt-get update && \
-  apt-get -y upgrade && \
-  apt-get install -y build-essential tcl
 
-RUN \
-  export DEBIAN_FRONTEND=noninteractive && \
-  apt-get install -y ca-certificates openssl curl git vim wget python3 python3-pip ruby ruby-dev ruby-bundler zlib1g-dev liblzma-dev nodejs mysql-server libmysqlclient-dev && \
-  rm -rf /var/lib/apt/lists/*
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get update && apt-get install -y \
+    build-essential \
+    ca-certificates \
+    curl \
+    git \
+    liblzma-dev \
+    libmysqlclient-dev \
+    mysql-server \
+    nodejs \
+    openssl \
+    python3 \
+    python3-pip \
+    ruby \
+    ruby-dev \
+    ruby-bundler \
+    tcl \
+    vim \
+    wget \
+    zlib1g-dev \
+ && rm -rf /var/lib/apt/lists/*
 
-ADD config/vimrc /root/.vimrc
-ADD config/gitconfig /root/.gitconfig
+COPY config/vimrc /root/.vimrc
+COPY config/gitconfig /root/.gitconfig
 
 ENV HOME /root
 
