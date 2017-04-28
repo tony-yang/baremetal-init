@@ -42,6 +42,10 @@ describe 'base_ubuntu_setup_cookbook::default' do
       expect(chef_run).to upgrade_apt_package('nfs-common')
     end
 
+    it 'installs the make package' do
+      expect(chef_run).to upgrade_apt_package('make')
+    end
+
     it 'creates the vim profile' do
       expect(chef_run).to create_cookbook_file('/home/testuser/.vimrc').with(
         source: 'vimrc',

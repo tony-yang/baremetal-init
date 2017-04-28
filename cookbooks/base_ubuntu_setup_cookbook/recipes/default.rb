@@ -8,7 +8,7 @@ apt_update 'update_ubuntu_repo' do
   action :update
 end
 
-%w(openssh-server vim nfs-common).each do |pkg|
+%w(openssh-server vim nfs-common make).each do |pkg|
   apt_package pkg do
     action :upgrade
   end
