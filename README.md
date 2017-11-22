@@ -26,6 +26,8 @@ sudo docker build -t ubuntu-dev .
 sudo docker run -it ubuntu-dev
 ```
 
+The ubuntu-dev image is the base image that other dev image pulls. So it is essential to build a local ubuntu-dev image first so that when other dev image is started, it can reference the local ubuntu-dev image. Otherwise, it will try to pull the image from the Docker Hub and fail.
+
 ## Dev Guide
 For the cookbook development, run `bundle install` to install the essential RubyGems library. Then run `rake`
 The following will be tested by default
