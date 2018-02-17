@@ -6,8 +6,10 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     ca-certificates \
     curl \
     git \
+    libffi-dev \
     liblzma-dev \
     libmysqlclient-dev \
+    libsqlite3-dev \
     mysql-server \
     nodejs \
     openssl \
@@ -16,7 +18,6 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     ruby \
     ruby-dev \
     ruby-bundler \
-    libffi-dev \
     tcl \
     vim \
     wget \
