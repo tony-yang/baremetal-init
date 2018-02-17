@@ -16,6 +16,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     ruby \
     ruby-dev \
     ruby-bundler \
+    libffi-dev \
     tcl \
     vim \
     wget \
