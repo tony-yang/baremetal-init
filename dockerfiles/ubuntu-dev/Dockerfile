@@ -22,6 +22,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     vim \
     wget \
     zlib1g-dev \
+ && ln -s /usr/bin/python3 /usr/bin/python \
  && rm -rf /var/lib/apt/lists/*
 
 COPY config/vimrc /root/.vimrc
