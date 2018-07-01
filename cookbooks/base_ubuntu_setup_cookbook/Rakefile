@@ -23,7 +23,8 @@ namespace :style do
   rescue LoadError => e
     puts ">>> Gem load error: #{e}, omitting style:chef" unless ENV['CI']
   end
-end # End namespace :style
+end
+# End namespace :style
 
 desc 'Run all style checks'
 task style: ['style:ruby', 'style:chef']
