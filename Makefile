@@ -1,4 +1,4 @@
-test: build-container test-base-ubuntu-setup-cookbook test-install-docker-cookbook test-install-git-server-cookbook
+test: build-container test-base-ubuntu-setup-cookbook test-install-docker-cookbook test-install-git-server-cookbook test-openvpn-host-configuration-cookbook
 
 build-container:
 	docker build -t baremetal-init .
@@ -11,3 +11,6 @@ test-install-docker-cookbook:
 
 test-install-git-server-cookbook:
 	docker run --rm baremetal-init bash -c "cd cookbooks/install_git_server_cookbook && bundle install && rake"
+
+test-openvpn-host-configuration-cookbook:
+	docker run --rm baremetal-init bash -c "cd cookbooks/openvpn_host_configuration_cookbook && bundle install && rake"
