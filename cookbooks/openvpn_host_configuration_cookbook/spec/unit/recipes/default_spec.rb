@@ -17,6 +17,14 @@ describe 'openvpn_host_configuration_cookbook::default' do
       expect { chef_run }.to_not raise_error
     end
 
+    it 'installs dnsutils' do
+      expect(chef_run).to upgrade_apt_package('dnsutils')
+    end
+
+    it 'updates the ubuntu repo' do
+      expect(chef_run).to update_apt_update('update_ubuntu_repo')
+    end
+
     it 'updates the sysctl conf' do
       expect(chef_run).to create_cookbook_file('/etc/sysctl.conf').with(
         source: 'sysctl.conf.16.04',

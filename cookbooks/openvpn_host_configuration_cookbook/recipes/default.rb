@@ -4,6 +4,16 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 
+if node['platform_version'] <= '16.04'
+  apt_update 'update_ubuntu_repo' do
+    action :update
+  end
+
+  apt_package 'dnsutils' do
+    action :upgrade
+  end
+end
+
 cookbook_file '/etc/sysctl.conf' do
   source "sysctl.conf.#{node['platform_version']}"
   owner 'root'
