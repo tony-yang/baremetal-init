@@ -29,14 +29,14 @@ describe 'install_docker_cookbook::default' do
     it 'adds a GPG key' do
       expect(chef_run).to run_execute('add_gpg')
         .with(command: 'apt-key adv \
-               --keyserver hkp://ha.pool.sks-keyservers.net:80 \
-               --recv-keys 58118E89F3A912897C070ADBF76221572C52609D')
+                --keyserver hkp://ha.pool.sks-keyservers.net:80 \
+                --recv-keys 58118E89F3A912897C070ADBF76221572C52609D')
     end
 
     it 'adds docker repo' do
       expect(chef_run).to run_execute('add_docker_repo')
         .with(command: 'echo "deb https://apt.dockerproject.org/repo ubuntu-xenial main" \
-               | sudo tee /etc/apt/sources.list.d/docker.list')
+                | sudo tee /etc/apt/sources.list.d/docker.list')
     end
 
     it 'updates docker package information' do
@@ -59,6 +59,34 @@ describe 'install_docker_cookbook::default' do
     it 'installs the docker compose' do
       expect(chef_run).to create_remote_file('/usr/local/bin/docker-compose')
         .with(mode: '0755')
+    end
+  end
+
+  context 'Install docker on Ubuntu 18.04 or newer' do
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new(platform: 'ubuntu', version: '18.04')
+      runner.converge(described_recipe)
+    end
+
+    it 'converges successfully' do
+      expect { chef_run }.to_not raise_error
+    end
+
+    it 'updates package information' do
+      expect(chef_run).to update_apt_update('update_package_info')
+    end
+
+    it 'installs certificates package' do
+      expect(chef_run).to upgrade_apt_package('ca_certificates')
+        .with(package_name: ['apt-transport-https', 'ca-certificates'])
+    end
+
+    it 'installs the docker.io package' do
+      expect(chef_run).to upgrade_apt_package('docker.io')
+    end
+
+    it 'installs the docker-compose package' do
+      expect(chef_run).to upgrade_apt_package('docker-compose')
     end
   end
 end
