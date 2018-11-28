@@ -1,0 +1,9 @@
+source 'http://rubygems.org'
+
+gem 'berkshelf', '~>6.0'
+gem 'chef-zero', '~>13.0'
+gem 'chefspec'
+gem 'foodcritic'
+gem 'rake'
+gem 'rspec'
+gem 'rubocop'
