@@ -39,6 +39,10 @@ describe 'gcp_ubuntu_renovation_cookbook::default' do
       expect(chef_run).to upgrade_apt_package('ufw')
     end
 
+    it 'installs the curl package' do
+      expect(chef_run).to upgrade_apt_package('curl')
+    end
+
     it 'creates the vim profile' do
       expect(chef_run).to create_cookbook_file('/home/testuser/.vimrc').with(
         source: 'vimrc',

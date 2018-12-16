@@ -8,7 +8,7 @@ apt_update 'update_ubuntu_repo' do
   action :update
 end
 
-%w(vim make ufw).each do |pkg|
+%w(vim make ufw curl).each do |pkg|
   apt_package pkg do
     action :upgrade
   end
